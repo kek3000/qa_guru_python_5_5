@@ -1,8 +1,12 @@
 from selene.support.shared import browser
+from selene import have
 import os
 
 
 def test_form(browser_start):
+    # Открываем url https://demoqa.com/automation-practice-form
+    browser.open('/automation-practice-form')
+
     # Заполняем Name
     browser.element('#firstName').type('Nikita')
     browser.element('#lastName').type('Alekseev')
@@ -46,4 +50,10 @@ def test_form(browser_start):
     # Жмём кнопку Submit
     browser.element('#submit').press_enter()
 
-    print('\nФорма полностью заполнена и отправлена, тест пройден успешно.')
+    # Проверка всех введёных значений
+    browser.all('tbody tr').should(have.exact_texts(
+        'Student Name Nikita Alekseev', 'Student Email test@test.ru', 'Gender Male', 'Mobile 7999999999',
+        'Date of Birth 18 July,1991', 'Subjects Computer Science', 'Hobbies Sports, Music',
+        'Picture image.jpg', 'Address Russia, Reutov', 'State and City Haryana Panipat'))
+
+    print('\nФорма полностью заполнена, отправлена и проверена. Тест пройден успешно.')
